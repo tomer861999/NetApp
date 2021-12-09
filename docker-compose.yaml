@@ -1,0 +1,32 @@
+version: "3"
+volumes:
+  database-data:
+services:
+  database:
+    image: "postgres" 
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+    volumes:
+      - database-data:/var/lib/postgresql/data/ 
+    restart: always
+  hello_world:
+    image: "digitalocean/flask-helloworld"
+    container_name: hello_world
+    expose:
+      - "5000"
+    restart: always
+    depends_on:
+      - database
+  nginx: 
+    image: nginx:latest
+    container_name: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 80:80
+    restart: always
+    depends_on:
+      - hello_world
+      

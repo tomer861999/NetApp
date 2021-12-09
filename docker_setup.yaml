@@ -1,0 +1,54 @@
+---
+- name: Install docker, docker-compose
+  hosts: ec2
+  become: yes
+  tasks : 
+    - name: Docker is installed
+      yum: 
+        name: docker
+        update_cache: yes
+        state: present
+    - name: Install docker-compose
+      get_url:
+        url: "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64"
+        dest: /usr/local/bin/docker-compose
+        mode: +x
+    - name: start docker service
+      systemd:
+        name: docker
+        state: started
+        enabled: true 
+    - name: Install python docker module
+      pip:
+        name: 
+          - docker
+          - docker-compose
+
+- name: add ec2-user to docker group
+  hosts: ec2
+  become: yes
+  tasks:
+    - name: add
+      user: 
+        name: ec2-user
+        groups: docker
+        append: yes
+    - name: reconnect to refresh
+      meta: reset_connection
+
+- name: Start containers via docker-compose file
+  hosts: ec2
+  tasks:
+    - name: copy docker-compose file from local to ec2
+      copy:
+        src: ~/NetApp/docker-compose.yaml
+        dest: /home/ec2-user/docker-compose.yaml 
+    - name: copy nginx config file
+      copy:
+        src: ~/NetApp/nginx.conf
+        dest: /home/ec2-user/nginx.conf
+    - name: docker-compose up 
+      docker_compose:
+        project_src: /home/ec2-user
+        files:
+          - docker-compose.yaml
