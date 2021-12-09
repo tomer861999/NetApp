@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# Gets IP as argument for bash script (my ip - 5.29.44.175/32)
+# Gets IP as argument for bash script 
 ip=$1
 
 # Applies terraform configuration that creates infrastructure:
