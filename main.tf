@@ -87,7 +87,7 @@ resource "aws_default_route_table" "default-route" {
 
 resource "aws_instance" "server" {
     ami = data.aws_ami.latest.id
-    instance_type = "t2.micro"
+    instance_type = "m5ad.xlarge"
     vpc_security_group_ids = [aws_security_group.my-sg.id]
     subnet_id = aws_subnet.my-subnet.id
     associate_public_ip_address = true
