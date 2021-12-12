@@ -1,1 +1,2 @@
-בעצם מה שהמפתח/לקוח יריץ זה את הסקריפט באש, יש הערות בסקריפט. יצאתי מנק הנחה שכל הכלים מותקנים ומקונפגים מבחינת credentials לaws.
+The developer/user will run the create_server.sh bash script with requested IP as an argument. 
+The bash scriipt calls terraform command to create infrustructure and networking in AWS and then calls ansible playbook that runs 3 docker containers as requested.
